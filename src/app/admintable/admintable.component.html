@@ -1,0 +1,61 @@
+<nz-input-group >
+    <input type="text" [(ngModel)]="searchValue" nzSearch nz-input placeholder="Search by name, email or role"/>
+  </nz-input-group>
+  <!-- <ng-template #suffixIconSearch>
+    [nzSuffix]="suffixIconSearch"
+    <button nz-button nzSearch nzSize="small" nzType="primary" ><i nz-icon nzType="search" nzTheme="outline" ></i></button>
+  </ng-template> -->
+  <br />
+  <br />
+<nz-table #editRowTable nzBordered [nzData]="listOfData" nzTableLayout="fixed" (nzCurrentPageDataChange) = "changePage($event)">
+    <thead>
+      <tr>
+        <th nzWidth="5%">
+          <input (change)="checkUncheckAll($event)" [(ngModel)]="masterSelected" name ="checkbox" style="margin-left: 10px;" type="checkbox">
+        </th>
+        <th nzWidth="20%" style="font-weight: 600;">Name</th>
+        <th nzWidth="20%" style="font-weight: 600;">Email</th>
+        <th nzWidth="20%" style="font-weight: 600;">Role</th>
+        <th nzWidth="10%" style="font-weight: 600;">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of editRowTable.data">
+        <ng-container *ngIf="searchValue ==='' || data.name.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()) ||
+        data.email.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()) || data.role.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase())
+        ">
+          <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
+            <td>
+              <input style="margin-left: 10px;" [(ngModel)]="data.isSelected" name ="checkbox" type="checkbox" value="{{data.id}}"
+              (click)="onChecked(data.id,$event)">
+            </td>
+            <td>{{data.name}}</td>
+            <td>{{data.email}}</td>
+            <td>{{data.role}}</td>
+            <td >
+              <a style="padding: 15px;" (click)="startEdit(data.id)"><i class="material-icons edit">edit</i></a>
+              <a nz-popconfirm nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteRow(data.id)"><i class="material-icons color">delete</i></a>
+            </td>
+          </ng-container>
+        </ng-container>
+
+        <ng-template #editTemplate>
+          <th><input type="checkbox"></th>
+          <td><input type="text" nz-input [(ngModel)]="editCache[data.id].data.name" /></td>
+          <td><input type="text" nz-input [(ngModel)]="editCache[data.id].data.email" /></td>
+          <td><input type="text" nz-input [(ngModel)]="editCache[data.id].data.role" /></td>
+          <td>
+            <a (click)="saveEdit(data.id)" class="save"><i class="material-icons">save</i></a>
+            <a
+            nz-popconfirm
+            nzPopconfirmTitle="Are you sure delete this task?"
+            (nzOnConfirm)="cancelEdit(data.id)"
+            (nzOnCancel)="cancelEdit(data.id)"
+            nzPopconfirmPlacement="left"
+          ><i class="material-icons">cancel</i></a>
+        </td>
+        </ng-template>
+      </tr>
+    </tbody>
+    <button nz-button *ngIf="isDeleteSelected" nzDanger nzType="primary" (click)="OnDelete()" [disabled]="(index.length==0)">Delete Selected</button>
+  </nz-table>

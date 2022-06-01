@@ -1,0 +1,10 @@
+.main-heading {
+    text-align: center;
+    color: rgb(106, 28, 179);
+    font-size: 25px;
+    font-family: 'Lucida Sans';
+    font-weight: 600;
+}
+.app-body {
+    margin: 25px;
+}

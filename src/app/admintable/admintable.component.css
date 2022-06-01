@@ -1,0 +1,15 @@
+.save {
+    margin-right: 8px;
+  }
+.checkbox {
+  margin-left: 15px;
+}
+.color {
+  color: #fc6265;
+}
+.edit {
+  color: #1ed9d9;
+}
+button {
+  border-radius: 8px;
+}
